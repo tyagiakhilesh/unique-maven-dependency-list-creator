@@ -10,20 +10,23 @@ def main():
        print("File path {} does not exist. Exiting...".format(filepath))
        sys.exit()
 
+   dependencySet = set()
+
    with open(filepath) as fp:
        cnt = 0
        for line in fp:
-           print("line {} contents {}".format(cnt, line))
            matchObj = re.match(r'(.*):(.*):(.*):(.*):(.*)', line, re.M)
-           if matchObj: 
-               print("matchObj.group(1) : {}".format(matchObj.group(1))) 
-               print("matchObj.group(2) : {}".format(matchObj.group(2)))
-               print("matchObj.group(3) : {}".format(matchObj.group(3)))
-               print("matchObj.group(4) : {}".format(matchObj.group(4)))
-               print("matchObj.group(5) : {}".format(matchObj.group(5)))
+           if matchObj:
+               groupId = matchObj.group(1).split()[-1]
+               artifactId = matchObj.group(2)
+               version = matchObj.group(4)
+               dependency = "{}:{}:{}".format(groupId, artifactId, version)
+               dependencySet.add(dependency)
            else:
-               print("No match!!")
                cnt += 1
+
+   dependencySet = sorted(dependencySet)
+   print(dependencySet)
 
 if __name__ == '__main__':  
    main()
